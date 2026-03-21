@@ -49,29 +49,47 @@ document.querySelectorAll(
   observer.observe(el);
 });
 
-// Contact form handling
+// Contact form handling (Formspree via AJAX)
 const contactForm = document.getElementById('contactForm');
 
 contactForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
-  const formData = new FormData(contactForm);
-  const data = Object.fromEntries(formData);
-
-  // For now, show a confirmation message
   const btn = contactForm.querySelector('button[type="submit"]');
   const originalText = btn.textContent;
-  btn.textContent = 'Message Sent!';
-  btn.style.background = 'linear-gradient(135deg, #7b5ea7, #5a3d8a)';
-  btn.style.color = '#fff';
+  btn.textContent = 'Sending...';
   btn.disabled = true;
 
-  contactForm.reset();
+  const formData = new FormData(contactForm);
 
-  setTimeout(() => {
-    btn.textContent = originalText;
-    btn.style.background = '';
-    btn.style.color = '';
-    btn.disabled = false;
-  }, 3000);
+  fetch(contactForm.action, {
+    method: 'POST',
+    body: formData,
+    headers: { 'Accept': 'application/json' }
+  })
+    .then(response => {
+      if (response.ok) {
+        btn.textContent = 'Message Sent!';
+        btn.style.background = 'linear-gradient(135deg, #7b5ea7, #5a3d8a)';
+        btn.style.color = '#fff';
+        contactForm.reset();
+      } else {
+        btn.textContent = 'Error — Try Again';
+        btn.style.background = '#a94442';
+        btn.style.color = '#fff';
+      }
+    })
+    .catch(() => {
+      btn.textContent = 'Error — Try Again';
+      btn.style.background = '#a94442';
+      btn.style.color = '#fff';
+    })
+    .finally(() => {
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.style.background = '';
+        btn.style.color = '';
+        btn.disabled = false;
+      }, 3000);
+    });
 });

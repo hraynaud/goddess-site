@@ -501,6 +501,75 @@ ul {
   background: var(--color-accent);
 }
 
+/* ===== Service Prices & Actions ===== */
+.service-price {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-bottom: 20px;
+}
+
+.service-card .btn {
+  margin: 0 6px 8px;
+}
+
+.stripe-btn {
+  position: relative;
+}
+
+.book-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ===== Booking / Calendly ===== */
+.booking {
+  padding: var(--section-padding);
+  background: var(--color-bg);
+}
+
+.calendly-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.calendly-placeholder {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 80px 40px;
+  text-align: center;
+}
+
+.calendly-placeholder-content svg {
+  color: var(--color-accent);
+  margin-bottom: 24px;
+}
+
+.calendly-placeholder-content h3 {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--color-text-heading);
+  margin-bottom: 12px;
+}
+
+.calendly-placeholder-content p {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  max-width: 460px;
+  margin: 0 auto 28px;
+  line-height: 1.8;
+}
+
+.calendly-inline-widget {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
 /* ===== About ===== */
 .about {
   padding: var(--section-padding);
