@@ -43,16 +43,49 @@ const observer = new IntersectionObserver((entries) => {
 
 // Apply fade-in to key elements
 document.querySelectorAll(
-  '.service-card, .book-feature, .workshop-card, .about-content, .media-item, .contact-grid, .section-title, .section-subtitle'
+  '.about-content, .contact-grid, .section-title, .section-subtitle'
 ).forEach(el => {
   el.classList.add('fade-in');
   observer.observe(el);
 });
 
+// Bilingual testimonial video language toggle (English / Español)
+document.querySelectorAll('.lang-toggle').forEach(toggle => {
+  const video = toggle.parentElement.querySelector('.bilingual-video');
+  if (!video) return;
+
+  toggle.querySelectorAll('.lang-toggle__btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const lang = btn.dataset.lang;
+      const nextSrc = video.dataset[lang];
+      if (!nextSrc || video.getAttribute('src') === nextSrc) return;
+
+      // Update button states (and the sliding highlight via .is-active)
+      toggle.querySelectorAll('.lang-toggle__btn').forEach(b => {
+        const active = b === btn;
+        b.classList.toggle('is-active', active);
+        b.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+
+      // Swap the video, preserving playback position and play state best-effort
+      const wasPlaying = !video.paused && !video.ended;
+      const resumeAt = video.currentTime;
+      const poster = video.dataset['poster' + (lang === 'es' ? 'Es' : 'En')];
+      if (poster) video.setAttribute('poster', poster);
+      video.setAttribute('src', nextSrc);
+      video.load();
+      video.addEventListener('loadedmetadata', () => {
+        if (resumeAt && resumeAt < video.duration) video.currentTime = resumeAt;
+        if (wasPlaying) video.play().catch(() => {});
+      }, { once: true });
+    });
+  });
+});
+
 // Contact form handling (Formspree via AJAX)
 const contactForm = document.getElementById('contactForm');
 
-contactForm.addEventListener('submit', (e) => {
+if (contactForm) contactForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
   const btn = contactForm.querySelector('button[type="submit"]');
@@ -93,3 +126,85 @@ contactForm.addEventListener('submit', (e) => {
       }, 3000);
     });
 });
+
+// Lightbox — single chat screenshots and the letters carousel
+const lightbox = document.getElementById('lightbox');
+if (lightbox) {
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxClose = document.getElementById('lightboxClose');
+  const lightboxPrev = document.getElementById('lightboxPrev');
+  const lightboxNext = document.getElementById('lightboxNext');
+
+  let items = [];   // [{ src, alt }]
+  let index = 0;
+
+  const render = () => {
+    const item = items[index];
+    if (!item) return;
+    lightboxImg.setAttribute('src', item.src);
+    lightboxImg.setAttribute('alt', item.alt || '');
+    const multi = items.length > 1;
+    lightboxPrev.hidden = !multi;
+    lightboxNext.hidden = !multi;
+  };
+
+  // Tall images (phone screenshots) get width-capped + scroll; wide ones fit the viewport.
+  lightboxImg.addEventListener('load', () => {
+    const tall = lightboxImg.naturalHeight > lightboxImg.naturalWidth * 1.3;
+    lightbox.classList.toggle('lightbox--tall', tall);
+  });
+
+  const openLightbox = (list, start = 0) => {
+    items = list;
+    index = start;
+    render();
+    lightbox.classList.add('is-open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    lightboxClose.focus();
+  };
+
+  const closeLightbox = () => {
+    lightbox.classList.remove('is-open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    lightboxImg.setAttribute('src', '');
+  };
+
+  const step = (delta) => {
+    index = (index + delta + items.length) % items.length;
+    render();
+  };
+
+  // Single-image chat screenshots
+  document.querySelectorAll('.chat-link').forEach(link => {
+    link.addEventListener('click', () =>
+      openLightbox([{ src: link.dataset.chatSrc, alt: 'Message exchange with the mother' }]));
+  });
+
+  // Letters deck → carousel of all letter cards
+  const deck = document.getElementById('lettersDeck');
+  if (deck) {
+    const letters = [...deck.querySelectorAll('.letter-card')]
+      .map(img => ({ src: img.getAttribute('src'), alt: img.alt }));
+    const openDeck = () => openLightbox(letters, 0);
+    deck.addEventListener('click', openDeck);
+    deck.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDeck(); }
+    });
+  }
+
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightboxPrev.addEventListener('click', (e) => { e.stopPropagation(); step(-1); });
+  lightboxNext.addEventListener('click', (e) => { e.stopPropagation(); step(1); });
+  // Click on the backdrop (not the image or buttons) closes it
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('is-open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    else if (e.key === 'ArrowLeft' && items.length > 1) step(-1);
+    else if (e.key === 'ArrowRight' && items.length > 1) step(1);
+  });
+}

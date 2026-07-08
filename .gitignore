@@ -1,1 +1,8 @@
 .DS_Store
+
+# Generated deploy artifacts (rebuild with ./build-site.sh)
+site/
+site-deploy.zip
+
+# Local Netlify folder
+.netlify
