@@ -111,16 +111,15 @@
   const STRIPE_PAYMENT_LINK = 'https://book.stripe.com/test_aFacN44UGeT6d0Z7bf1ZS00';
   const SESSION_PRICE = '$21';
 
-  // ---- Zoom (one recurring link for every session) ----
-  // All sessions use the SAME recurring Zoom meeting. Entry is gated by Zoom's
-  // Waiting Room against the paid signup list (the Stripe dashboard), so it's
-  // fine that the same link is shown to everyone who reserves.
-  //   - PayPal / Venmo / Zelle: the link is shown in the on-page confirmation
-  //     below once they reserve.
-  //   - Credit Card: the link is shown on Stripe's post-payment confirmation
-  //     page instead — set that message in the Stripe Payment Link dashboard
-  //     (After payment → Show confirmation page).
-  // Paste the recurring meeting link below (looks like https://zoom.us/j/xxxx).
+  // ---- Zoom links ----
+  // Credit Card (automated): payment triggers a Stripe webhook handled by
+  //   netlify/functions/stripe-webhook.js, which registers the payer on the
+  //   recurring group meeting. Zoom then emails them a UNIQUE join link.
+  //   Set the Stripe Payment Link's post-payment message to tell buyers to
+  //   check their email for it. See zoom-automation-setup.md.
+  // PayPal / Venmo / Zelle (manual): no automatic payment signal, so these
+  //   still show the shared recurring link below in the on-page confirmation.
+  // Paste the shared recurring meeting link below (looks like https://zoom.us/j/xxxx).
   const ZOOM_LINK = 'https://us05web.zoom.us/j/83741087066';
 
   // Select a slot → enable + populate the request form
