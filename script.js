@@ -50,15 +50,21 @@ document.querySelectorAll(
 });
 
 // Bilingual testimonial video language toggle (English / Español)
+// The videos are YouTube embeds, so we swap the iframe's src between the
+// English and Spanish embed URLs. autoplay=1 is safe here because the swap
+// is driven by a deliberate user click (button gesture).
 document.querySelectorAll('.lang-toggle').forEach(toggle => {
-  const video = toggle.parentElement.querySelector('.bilingual-video');
-  if (!video) return;
+  const frame = toggle.parentElement.querySelector('.bilingual-video');
+  if (!frame) return;
 
   toggle.querySelectorAll('.lang-toggle__btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const lang = btn.dataset.lang;
-      const nextSrc = video.dataset[lang];
-      if (!nextSrc || video.getAttribute('src') === nextSrc) return;
+      const nextSrc = frame.dataset[lang];
+      if (!nextSrc) return;
+
+      const currentBase = (frame.getAttribute('src') || '').split('?')[0];
+      if (currentBase === nextSrc) return;
 
       // Update button states (and the sliding highlight via .is-active)
       toggle.querySelectorAll('.lang-toggle__btn').forEach(b => {
@@ -67,17 +73,7 @@ document.querySelectorAll('.lang-toggle').forEach(toggle => {
         b.setAttribute('aria-pressed', active ? 'true' : 'false');
       });
 
-      // Swap the video, preserving playback position and play state best-effort
-      const wasPlaying = !video.paused && !video.ended;
-      const resumeAt = video.currentTime;
-      const poster = video.dataset['poster' + (lang === 'es' ? 'Es' : 'En')];
-      if (poster) video.setAttribute('poster', poster);
-      video.setAttribute('src', nextSrc);
-      video.load();
-      video.addEventListener('loadedmetadata', () => {
-        if (resumeAt && resumeAt < video.duration) video.currentTime = resumeAt;
-        if (wasPlaying) video.play().catch(() => {});
-      }, { once: true });
+      frame.setAttribute('src', nextSrc + '?autoplay=1&rel=0');
     });
   });
 });

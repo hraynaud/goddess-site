@@ -1012,6 +1012,14 @@ ul {
   background: #000;
 }
 
+.video-card iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  border: 0;
+  background: #000;
+}
+
 .video-card figcaption {
   padding: 18px 20px;
   text-align: center;

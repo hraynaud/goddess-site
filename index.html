@@ -99,18 +99,20 @@
 
       <div class="video-grid">
         <figure class="video-card">
-          <video controls preload="metadata" playsinline poster="testimonials/video/poster/hip-healing.jpg">
-            <source src="testimonials/video/hip-healing.mp4" type="video/mp4">
-            Your browser doesn&rsquo;t support video playback.
-          </video>
+          <iframe class="video-card__frame" src="https://www.youtube-nocookie.com/embed/QSdwNfF6Klg"
+                  title="Hip Healing" loading="lazy"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen></iframe>
           <figcaption>Hip Healing</figcaption>
         </figure>
 
         <figure class="video-card">
-          <video controls preload="metadata" playsinline poster="testimonials/video/poster/baby-rash.jpg">
-            <source src="testimonials/video/baby-rash.mp4" type="video/mp4">
-            Your browser doesn&rsquo;t support video playback.
-          </video>
+          <iframe class="video-card__frame" src="https://www.youtube-nocookie.com/embed/InJeLhX9bsc"
+                  title="A Baby&rsquo;s Rash" loading="lazy"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen></iframe>
           <figcaption>A Baby&rsquo;s Rash</figcaption>
           <button type="button" class="chat-link" data-chat-src="testimonials/baby-rash-chat.png"
                   aria-haspopup="dialog">
@@ -119,31 +121,32 @@
         </figure>
 
         <figure class="video-card">
-          <video controls preload="metadata" playsinline poster="testimonials/video/poster/neighbor.jpg">
-            <source src="testimonials/video/neighbor.mp4" type="video/mp4">
-            Your browser doesn&rsquo;t support video playback.
-          </video>
+          <iframe class="video-card__frame" src="https://www.youtube-nocookie.com/embed/dokFscbLtQI"
+                  title="A Neighbor&rsquo;s Story" loading="lazy"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen></iframe>
           <figcaption>A Neighbor&rsquo;s Story</figcaption>
         </figure>
 
         <figure class="video-card">
-          <video controls preload="metadata" playsinline poster="testimonials/video/poster/marias-toe.jpg">
-            <source src="testimonials/video/marias-toe.mp4" type="video/mp4">
-            Your browser doesn&rsquo;t support video playback.
-          </video>
+          <iframe class="video-card__frame" src="https://www.youtube-nocookie.com/embed/taas9tyKrhI"
+                  title="Maria&rsquo;s Toe" loading="lazy"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen></iframe>
           <figcaption>Maria&rsquo;s Toe</figcaption>
         </figure>
 
         <figure class="video-card">
-          <video class="bilingual-video" controls preload="metadata" playsinline
-                 src="testimonials/video/Janet-english.mp4"
-                 poster="testimonials/video/poster/Janet-english.jpg"
-                 data-en="testimonials/video/Janet-english.mp4"
-                 data-es="testimonials/video/Janet-spanish.mp4"
-                 data-poster-en="testimonials/video/poster/Janet-english.jpg"
-                 data-poster-es="testimonials/video/poster/Janet-spanish.jpg">
-            Your browser doesn&rsquo;t support video playback.
-          </video>
+          <iframe class="video-card__frame bilingual-video"
+                  src="https://www.youtube-nocookie.com/embed/81-TSDf7Hkw"
+                  title="Janet" loading="lazy"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen
+                  data-en="https://www.youtube-nocookie.com/embed/81-TSDf7Hkw"
+                  data-es="https://www.youtube-nocookie.com/embed/IlA3SaP2M50"></iframe>
           <div class="lang-toggle" role="group" aria-label="Choose video language">
             <span class="lang-toggle__slider" aria-hidden="true"></span>
             <button type="button" class="lang-toggle__btn is-active" data-lang="en" aria-pressed="true">English</button>
@@ -153,15 +156,14 @@
         </figure>
 
         <figure class="video-card">
-          <video class="bilingual-video" controls preload="metadata" playsinline
-                 src="testimonials/video/Andy-english.mp4"
-                 poster="testimonials/video/poster/Andy-english.jpg"
-                 data-en="testimonials/video/Andy-english.mp4"
-                 data-es="testimonials/video/Andy-spanish.mp4"
-                 data-poster-en="testimonials/video/poster/Andy-english.jpg"
-                 data-poster-es="testimonials/video/poster/Andy-spanish.jpg">
-            Your browser doesn&rsquo;t support video playback.
-          </video>
+          <iframe class="video-card__frame bilingual-video"
+                  src="https://www.youtube-nocookie.com/embed/UteLo90dJp4"
+                  title="Andy" loading="lazy"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen
+                  data-en="https://www.youtube-nocookie.com/embed/UteLo90dJp4"
+                  data-es="https://www.youtube-nocookie.com/embed/i75OAU3NfSk"></iframe>
           <div class="lang-toggle" role="group" aria-label="Choose video language">
             <span class="lang-toggle__slider" aria-hidden="true"></span>
             <button type="button" class="lang-toggle__btn is-active" data-lang="en" aria-pressed="true">English</button>
@@ -204,10 +206,12 @@
         <h3 class="media-feature__title">Interview with Robin Jay</h3>
         <p class="media-feature__role">Entrepreneur, Film Producer, Author, Public Speaker</p>
         <div class="video-embed">
-          <video controls preload="metadata" playsinline poster="media/video/poster/robin-goddess.jpg">
-            <source src="media/video/robin-goddess.mp4" type="video/mp4">
-            Your browser doesn&rsquo;t support video playback.
-          </video>
+          <iframe src="https://www.youtube-nocookie.com/embed/oiq-qUeHoNM"
+                  title="Interview with Robin Jay"
+                  loading="lazy"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen></iframe>
         </div>
       </div>
 
