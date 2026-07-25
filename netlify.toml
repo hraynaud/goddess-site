@@ -1,16 +1,17 @@
 # Netlify configuration for T.O.U.C.H. The World
 #
-# The public site is built into ./site by ./build-site.sh.
-# Serverless functions (Stripe → Zoom automation) live in ./netlify/functions.
+# Netlify runs ./build-site.sh, which assembles the public site into ./site,
+# then serves that folder. A push to the connected branch triggers a fresh
+# build and deploy automatically — no manual zip upload needed.
 #
-# Because this deploy includes a function, use the Netlify CLI instead of the
-# drag-and-drop flow:
-#
-#   ./build-site.sh
-#   netlify deploy --prod --dir=site --functions=netlify/functions
-#
-# Secrets are set in the Netlify dashboard (Site settings → Environment
-# variables), never committed here. See zoom-automation-setup.md.
+# Serverless functions (the Stripe → Zoom automation) live in ./netlify/functions
+# and deploy alongside the site on this branch. Secrets are set in the Netlify
+# dashboard (Site settings → Environment variables), never committed here.
+# See zoom-automation-setup.md.
+
+[build]
+  command = "./build-site.sh"
+  publish = "site"
 
 [functions]
   directory = "netlify/functions"
