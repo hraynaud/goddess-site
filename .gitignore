@@ -3,6 +3,14 @@
 # Generated deploy artifacts (rebuild with ./build-site.sh)
 site/
 site-deploy.zip
+site.zip
 
 # Local Netlify folder
 .netlify
+
+# Local dev / credential-test tooling (not part of the deployed site)
+test-zoom.js
+test-webhook-local.js
+
+# Large local archives / masters (kept off the repo; site uses YouTube)
+snapshots/

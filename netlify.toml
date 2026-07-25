@@ -1,0 +1,9 @@
+# Netlify configuration for T.O.U.C.H. The World
+#
+# Netlify runs ./build-site.sh, which assembles the public site into ./site,
+# then serves that folder. A push to the connected branch triggers a fresh
+# build and deploy automatically — no manual zip upload needed.
+
+[build]
+  command = "./build-site.sh"
+  publish = "site"
