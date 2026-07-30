@@ -8,6 +8,10 @@ site.zip
 # Local Netlify folder
 .netlify
 
+# Local secrets — NEVER commit (Zoom/Stripe credentials for local testing)
+.env
+.env.*
+
 # Local dev / credential-test tooling (not part of the deployed site)
 test-zoom.js
 test-webhook-local.js
