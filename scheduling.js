@@ -101,15 +101,15 @@
   // ---- Stripe (Credit Card) — no backend required ----
   // To take live card payments:
   //   1. In Stripe (dashboard.stripe.com) → Payment Links → New, create a
-  //      Payment Link for a $21 product/price.
+  //      Payment Link for a $25 product/price.
   //   2. Paste its URL below (it looks like https://buy.stripe.com/xxxxxxxx).
   // Stripe hosts the card form, PCI, and receipts — nothing card-related
   // touches this site. Until a real link is set, Credit Card falls back to
   // the front-end preview confirmation.
-  // NOTE: this is a TEST-mode link (test_ prefix). Before launch, regenerate the
-  // same Payment Link in Stripe's live mode and replace the URL below.
-  const STRIPE_PAYMENT_LINK = 'https://book.stripe.com/test_aFacN44UGeT6d0Z7bf1ZS00';
-  const SESSION_PRICE = '$21';
+  // LIVE-mode Payment Link (client's Stripe account). Charges the real $25 and
+  // fires the checkout.session.completed webhook → per-session Zoom registration.
+  const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/cNidR89vjbBDdOlb6Vb3q00';
+  const SESSION_PRICE = '$25';
 
   // ---- Zoom links ----
   // Credit Card (automated): payment triggers a Stripe webhook handled by
