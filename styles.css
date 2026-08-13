@@ -1254,7 +1254,7 @@ ul {
 .energy-healing-text {
   max-width: 720px;
   margin: 32px auto 0;
-  text-align: center;
+  text-align: left;
 }
 
 .energy-healing-text p {
