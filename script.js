@@ -78,7 +78,7 @@ document.querySelectorAll('.lang-toggle').forEach(toggle => {
   });
 });
 
-// Contact form handling (Formspree via AJAX)
+// Contact form handling (Netlify Forms via AJAX)
 const contactForm = document.getElementById('contactForm');
 
 if (contactForm) contactForm.addEventListener('submit', (e) => {
@@ -91,10 +91,11 @@ if (contactForm) contactForm.addEventListener('submit', (e) => {
 
   const formData = new FormData(contactForm);
 
+  // Netlify Forms expects a urlencoded body containing the form-name field.
   fetch(contactForm.action, {
     method: 'POST',
-    body: formData,
-    headers: { 'Accept': 'application/json' }
+    body: new URLSearchParams(formData).toString(),
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
   })
     .then(response => {
       if (response.ok) {

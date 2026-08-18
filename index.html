@@ -256,20 +256,27 @@
             <h4>Available For:</h4>
             <ul>
               <li>Group Energy Healing Sessions</li>
+              <li>One on One Sessions</li>
               <li>Motivational Speaking Events</li>
               <li>Book Orders</li>
             </ul>
           </div>
         </div>
 
-        <!-- Formspree-powered contact form
-             To activate: replace YOUR_FORM_ID with your Formspree form ID
-             1. Sign up at https://formspree.io (free tier: 50 submissions/mo)
-             2. Create a form and copy the form ID
-             3. Replace YOUR_FORM_ID below -->
+        <!-- Netlify Forms: detected at deploy time from this markup.
+             Submissions appear under Project > Forms in Netlify, and are
+             emailed to the address set in Forms > Form notifications.
+             The hidden form-name field is required for AJAX submissions. -->
         <form class="contact-form" id="contactForm"
-              action="https://formspree.io/f/YOUR_FORM_ID"
-              method="POST">
+              name="contact"
+              action="/"
+              method="POST"
+              data-netlify="true"
+              data-netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="contact">
+          <p class="form-hp" hidden aria-hidden="true">
+            <label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
+          </p>
           <div class="form-group">
             <label for="name">Name</label>
             <input type="text" id="name" name="name" required>
@@ -286,6 +293,7 @@
               <option value="period-party">The Period Party</option>
               <option value="remember-powers">Remember Your Powers</option>
               <option value="group-session">Group Energy Healing Session</option>
+              <option value="one-on-one">One on One Session</option>
               <option value="books">Book Order</option>
               <option value="other">Other</option>
             </select>
