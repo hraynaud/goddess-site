@@ -14,6 +14,8 @@
   --color-text-muted: #ffffff;  /* per client: former muted grey now white */
   --color-text-heading: #ffffff;
   --color-border: rgba(212, 175, 55, 0.15);
+  --color-link: #7ec8f2;        /* light blue, reads unmistakably as a link */
+  --color-link-hover: #a8dcff;
   --font-heading: 'Cormorant Garamond', Georgia, serif;
   --font-body: 'Montserrat', 'Helvetica Neue', sans-serif;
   --max-width: 1200px;
@@ -1071,6 +1073,32 @@ ul {
   text-align: center;
   color: var(--color-text-heading);
   margin-bottom: 4px;
+}
+
+/* Media — pointer to the fuller publications / appearances site.
+   Slightly larger than body copy (0.95rem) so it stands out. */
+.media-more {
+  margin-top: 48px;
+  padding-top: 60px;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.7;
+  color: var(--color-text);
+}
+
+.media-more a {
+  color: var(--color-link);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+  white-space: nowrap;
+  transition: color var(--transition);
+}
+
+.media-more a:hover,
+.media-more a:focus-visible {
+  color: var(--color-link-hover);
 }
 
 .media-feature__role {
