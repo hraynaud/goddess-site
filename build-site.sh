@@ -16,6 +16,10 @@ copy_glob() { local dest="${!#}"; local files=("${@:1:$#-1}"); [ ${#files[@]} -g
 # --- Core pages / code / styles ---
 cp index.html scheduling.html scheduling.js script.js styles.css "$OUT/"
 
+# --- Testimonials admin page (data lives in Netlify Blobs; see netlify/functions) ---
+cp admin.html admin.css admin.js "$OUT/"
+cp netlify/lib/youtube.mjs "$OUT/youtube.mjs"
+
 # --- Images used by the pages ---
 cp Cosmic_Healing_Light.jpg goddess-in-white.jpeg "$OUT/"
 
@@ -34,4 +38,4 @@ copy_glob testimonials/text/*.png "$OUT/testimonials/text/"
 find "$OUT" -name '.DS_Store' -delete
 
 echo "Built ./$OUT/ ($(find "$OUT" -type f | wc -l | tr -d ' ') files, $(du -sh "$OUT" | cut -f1))"
-echo "Deploy: drag the '$OUT' folder onto https://app.netlify.com/drop"
+echo "Deploy: use the project 'deploy' skill (Netlify CLI, site touch-the-world)"

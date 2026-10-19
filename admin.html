@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Testimonials Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <section class="login" id="loginView" hidden>
+    <form class="login__card" id="loginForm">
+      <h1>Testimonials Admin</h1>
+      <label for="password">Password</label>
+      <input id="password" type="password" autocomplete="current-password" required>
+      <p class="field-err" id="loginError" role="alert" hidden></p>
+      <button class="btn" type="submit" id="loginBtn">Log in</button>
+    </form>
+  </section>
+
+  <div id="appView" hidden>
+    <header class="top">
+      <h1>Testimonials Admin</h1>
+      <nav>
+        <a href="/#testimonials" target="_blank" rel="noopener">View site ↗</a>
+        <button type="button" class="link" id="logout">Log out</button>
+      </nav>
+    </header>
+    <div class="toast" id="toast" role="status" hidden></div>
+
+    <main class="layout">
+      <section class="lists">
+        <div class="tabs" role="tablist">
+          <button type="button" class="tab is-on" role="tab" aria-selected="true" data-tab="videos">Videos (<span id="videoCount">0</span>)</button>
+          <button type="button" class="tab" role="tab" aria-selected="false" data-tab="letters">Letters (<span id="letterCount">0</span>)</button>
+        </div>
+
+        <div data-panel="videos">
+          <div class="bar"><h2>Videos</h2><button type="button" class="btn" id="addVideo">+ Add video</button></div>
+          <p class="note">Shown on the homepage in this order.</p>
+          <ul class="list" id="videoList"></ul>
+        </div>
+
+        <div data-panel="letters" hidden>
+          <div class="bar"><h2>Letters</h2><button type="button" class="btn" id="addLetter">+ Add letter</button></div>
+          <p class="note">Shown in the “Notes of gratitude” deck in this order.</p>
+          <ul class="list" id="letterList"></ul>
+        </div>
+      </section>
+
+      <aside class="panel" id="videoPanel" hidden>
+        <form id="videoForm" novalidate>
+          <div class="panel__top"><button type="button" class="link" data-close>← Back</button><h2 id="videoFormTitle">Add a video</h2></div>
+
+          <label for="vUrl">YouTube link</label>
+          <input id="vUrl" name="youtubeUrl" type="url" inputmode="url" autocomplete="off" placeholder="Paste the link from YouTube">
+          <p class="hint">In YouTube, tap Share → Copy link.</p>
+          <p class="field-err" data-err="youtubeUrl" hidden></p>
+
+          <fieldset class="seg">
+            <legend>Video shape</legend>
+            <label><input type="radio" name="shape" value="vertical" checked> ▯ Vertical (phone)</label>
+            <label><input type="radio" name="shape" value="horizontal"> ▭ Horizontal</label>
+          </fieldset>
+          <div class="player" id="vPlayer"></div>
+          <p class="hint center">If you see black bars, try the other shape.</p>
+
+          <label for="vCaption">Caption</label>
+          <input id="vCaption" name="caption" type="text" maxlength="120" placeholder="e.g. Hip Healing">
+          <p class="hint">Shown under the video on the homepage.</p>
+          <p class="field-err" data-err="caption" hidden></p>
+
+          <label for="vSpanish">Spanish version <small>(optional)</small></label>
+          <input id="vSpanish" name="spanishYoutubeUrl" type="url" inputmode="url" autocomplete="off" placeholder="Paste the Spanish YouTube link">
+          <p class="hint">Adds an English / Español switch to this video.</p>
+          <p class="field-err" data-err="spanishYoutubeUrl" hidden></p>
+
+          <label for="vShot">“Read the messages” screenshot <small>(optional)</small></label>
+          <div class="shot" id="vShotCurrent" hidden>
+            <img alt="">
+            <span>Screenshot attached</span>
+            <button type="button" class="link" id="vShotRemove">✕ Remove</button>
+          </div>
+          <input id="vShot" type="file" accept="image/*">
+          <p class="field-err" data-err="screenshot" hidden></p>
+
+          <div class="form-acts">
+            <button type="button" class="btn btn--ghost" data-close>Cancel</button>
+            <button type="submit" class="btn" id="vSave" disabled>Save video</button>
+          </div>
+        </form>
+      </aside>
+
+      <aside class="panel" id="letterPanel" hidden>
+        <form id="letterForm" novalidate>
+          <div class="panel__top"><button type="button" class="link" data-close>← Back</button><h2 id="letterFormTitle">Add a letter</h2></div>
+
+          <label for="lImage">Letter image</label>
+          <img class="letter-preview" id="lPreview" alt="" hidden>
+          <input id="lImage" type="file" accept="image/*">
+          <p class="hint">A photo or screenshot of the letter, email, or message.</p>
+          <p class="field-err" data-err="image" hidden></p>
+
+          <label for="lAlt">Short description</label>
+          <input id="lAlt" name="alt" type="text" maxlength="120" placeholder="e.g. Letter from Mannie about back pain">
+          <p class="hint">Who it’s from and what it’s about. Read aloud by screen readers.</p>
+          <p class="field-err" data-err="alt" hidden></p>
+
+          <div class="form-acts">
+            <button type="button" class="btn btn--ghost" data-close>Cancel</button>
+            <button type="submit" class="btn" id="lSave" disabled>Save letter</button>
+          </div>
+        </form>
+      </aside>
+    </main>
+  </div>
+
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
