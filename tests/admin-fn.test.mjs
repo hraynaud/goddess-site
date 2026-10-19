@@ -159,3 +159,70 @@ test('rejects non-POST', async () => {
   const handler = makeHandler({ getStore: f.getStore, purgeCache: async () => {}, getPassword: () => 'pw', sleep: async () => {} });
   assert.equal((await handler(new Request('https://goddessttw.com/api/admin'))).status, 405);
 });
+
+test('a save that races another save is retried on fresh data, not written over it', async () => {
+  const { call, live } = setup();
+  await call({ action: 'add-letter', letter: { alt: 'X', image: PNG } });
+  const added = await call({ action: 'add-letter', letter: { alt: 'Y', image: PNG } });
+  const [x, y] = added.body.data.letters;
+
+  // Another request deletes Y right after this one has read the list.
+  const store = live();
+  const realGet = store.getWithMetadata.bind(store);
+  let raced = false;
+  store.getWithMetadata = async (key, opts) => {
+    const result = await realGet(key, opts);
+    if (key === 'data' && !raced) {
+      raced = true;
+      await store.setJSON('data', { ...result.data, letters: result.data.letters.filter((l) => l.id !== y.id) });
+      await store.delete(`img/${y.imgId}`);
+    }
+    return result;
+  };
+
+  const r = await call({ action: 'move', kind: 'letter', id: x.id, direction: 'down' });
+  assert.equal(r.status, 200);
+  assert.deepEqual(r.body.data.letters.map((l) => l.alt), ['X']);
+  assert.deepEqual((await store.get('data', { type: 'json' })).letters.map((l) => l.alt), ['X']);
+});
+
+test('gives up with 409 if the list keeps changing underneath', async () => {
+  const { call, live } = setup();
+  await call({ action: 'add-video', video: VIDEO });
+  const store = live();
+  const realGet = store.getWithMetadata.bind(store);
+  store.getWithMetadata = async (key, opts) => {
+    const result = await realGet(key, opts);
+    if (key === 'data') await store.setJSON('data', result.data); // bumps the etag every time
+    return result;
+  };
+  const r = await call({ action: 'add-video', video: VIDEO });
+  assert.equal(r.status, 409);
+});
+
+test('purge is retried once; a second failure is reported as purged:false', async () => {
+  const f = fakeStores();
+  let calls = 0;
+  const make = (failures) => makeHandler({ getStore: f.getStore, purgeCache: async () => { calls++; if (calls <= failures) throw new Error('5xx'); }, getPassword: () => 'pw', sleep: async () => {} });
+  const req = () => new Request('https://goddessttw.com/api/admin', { method: 'POST', headers: { 'x-admin-password': 'pw' }, body: JSON.stringify({ action: 'add-video', video: VIDEO }) });
+
+  let res = await (await make(1)(req())).json();
+  assert.equal(res.purged, true);
+  assert.equal(calls, 2);
+
+  calls = 0;
+  res = await (await make(2)(req())).json();
+  assert.equal(res.ok, true);
+  assert.equal(res.purged, false);
+});
+
+test('saves still work when the store gives no etag (local Blobs emulator)', async () => {
+  const { call, live } = setup();
+  await call({ action: 'add-video', video: VIDEO });
+  const store = live();
+  const realGet = store.getWithMetadata.bind(store);
+  store.getWithMetadata = async (key, opts) => { const r = await realGet(key, opts); return r && { ...r, etag: undefined }; };
+  const r = await call({ action: 'add-video', video: { ...VIDEO, caption: 'Two' } });
+  assert.equal(r.status, 200);
+  assert.equal(r.body.data.videos.length, 2);
+});

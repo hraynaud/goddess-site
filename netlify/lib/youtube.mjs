@@ -9,8 +9,11 @@ const HOSTS = new Set([
 
 export function parseYouTubeId(input) {
   if (typeof input !== 'string') return null;
+  const raw = input.trim();
+  // People often paste "youtu.be/…" with no scheme; assume https.
+  const withScheme = /^[a-z][a-z0-9+.-]*:/i.test(raw) ? raw : `https://${raw}`;
   let url;
-  try { url = new URL(input.trim()); } catch { return null; }
+  try { url = new URL(withScheme); } catch { return null; }
   if (url.protocol !== 'https:' && url.protocol !== 'http:') return null;
   const host = url.hostname.toLowerCase();
   if (!HOSTS.has(host)) return null;

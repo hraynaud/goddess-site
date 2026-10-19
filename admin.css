@@ -57,6 +57,8 @@ button:disabled { cursor: not-allowed; opacity: .4; }
 .ic--danger { color: var(--danger); }
 .confirm { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 13px; }
 .confirm .btn { padding: 8px 12px; }
+/* While a save is in flight, row actions wait (prevents racing writes). */
+.is-busy .acts button, .is-busy .confirm button { pointer-events: none; opacity: .4; }
 .empty { opacity: .6; padding: 16px; text-align: center; border: 1px dashed var(--border); border-radius: 12px; }
 @media (max-width: 520px) {
   .row { flex-wrap: wrap; }

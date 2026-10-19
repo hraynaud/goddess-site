@@ -11,6 +11,12 @@ const SAVE_ERROR = 'Couldn’t save — please try again.';
 
 let password = '';
 let data = { videos: [], letters: [] };
+let busy = false;        // one write at a time, so quick taps can't race each other
+let lastPurged = true;   // false if the homepage cache couldn't be cleared on the last save
+
+const savedMessage = () => (lastPurged
+  ? 'Saved — it’s on the homepage now.'
+  : 'Saved — the homepage will update within a few minutes.');
 
 // ---------- helpers ----------
 function el(tag, attrs = {}, text) {
@@ -103,13 +109,18 @@ async function api(action, payload = {}) {
   let body = {};
   try { body = await res.json(); } catch { /* non-JSON error page */ }
   if (!res.ok) throw Object.assign(new Error(body.error || SAVE_ERROR), { status: res.status, field: body.field });
-  return body.data;
+  return body;
 }
 
 // Runs a write; on success re-renders. Returns true/false. Keeps forms intact on failure.
 async function run(action, payload, form) {
+  if (busy) return false;
+  busy = true;
+  document.body.classList.add('is-busy');
   try {
-    data = await api(action, payload);
+    const body = await api(action, payload);
+    data = body.data;
+    lastPurged = body.purged !== false;
     renderLists();
     return true;
   } catch (err) {
@@ -117,6 +128,9 @@ async function run(action, payload, form) {
     if (err.field && form && form.querySelector(`[data-err="${err.field}"]`)) setFieldError(form, err.field, err.message);
     else showToast(err.message, 'error');
     return false;
+  } finally {
+    busy = false;
+    document.body.classList.remove('is-busy');
   }
 }
 
@@ -145,7 +159,7 @@ async function login(pw, { silent = false } = {}) {
   password = pw;
   $('#loginBtn').disabled = true;
   try {
-    data = await api('login-check');
+    data = (await api('login-check')).data;
     session.set(pw);
     showApp();
     renderLists();
@@ -365,7 +379,7 @@ vForm.addEventListener('submit', async (e) => {
     : await run('add-video', { video }, vForm);
   save.textContent = 'Save video';
   save.disabled = !videoFormValid();
-  if (ok) { closePanels(); showToast('Saved — it’s on the homepage now.', 'ok', true); }
+  if (ok) { closePanels(); showToast(savedMessage(), 'ok', true); }
 });
 
 // ---------- letter form ----------
@@ -432,7 +446,7 @@ lForm.addEventListener('submit', async (e) => {
     : await run('add-letter', { letter }, lForm);
   save.textContent = 'Save letter';
   save.disabled = !letterFormValid();
-  if (ok) { closePanels(); showToast('Saved — it’s on the homepage now.', 'ok', true); }
+  if (ok) { closePanels(); showToast(savedMessage(), 'ok', true); }
 });
 
 // ---------- tabs, header, boot ----------

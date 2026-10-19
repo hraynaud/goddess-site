@@ -32,3 +32,10 @@ test('rejects non-YouTube and malformed input', () => {
     'https://www.youtube.com/channel/UC123',
   ]) assert.equal(parseYouTubeId(bad), null, String(bad));
 });
+
+test('accepts links pasted without https://', () => {
+  assert.equal(parseYouTubeId('youtu.be/QSdwNfF6Klg'), 'QSdwNfF6Klg');
+  assert.equal(parseYouTubeId('youtube.com/watch?v=QSdwNfF6Klg'), 'QSdwNfF6Klg');
+  assert.equal(parseYouTubeId(' www.youtube.com/shorts/QSdwNfF6Klg '), 'QSdwNfF6Klg');
+  assert.equal(parseYouTubeId('evil.com/watch?v=QSdwNfF6Klg'), null);
+});

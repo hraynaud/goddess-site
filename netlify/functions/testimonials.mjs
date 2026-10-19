@@ -34,7 +34,8 @@ export function makeHandler(deps) {
       const data = normalizeData(await store.get('data', { type: 'json' }));
       return json(data, 200, {
         'Cache-Control': 'public, max-age=0, must-revalidate',
-        'Netlify-CDN-Cache-Control': 'public, durable, s-maxage=31536000',
+        // Purged on every save; the short lifetime only matters if a purge fails.
+        'Netlify-CDN-Cache-Control': 'public, durable, s-maxage=300, stale-while-revalidate=60',
         'Netlify-Cache-Tag': 'testimonials',
       });
     } catch (err) {

@@ -12,6 +12,8 @@ test('returns an empty list when nothing is stored', async () => {
   assert.deepEqual(await res.json(), { videos: [], letters: [] });
   assert.equal(res.headers.get('Netlify-Cache-Tag'), 'testimonials');
   assert.match(res.headers.get('Netlify-CDN-Cache-Control'), /durable/);
+  // Short CDN lifetime bounds staleness if a purge ever fails.
+  assert.match(res.headers.get('Netlify-CDN-Cache-Control'), /s-maxage=300\b/);
   assert.match(res.headers.get('Cache-Control'), /max-age=0/);
   assert.deepEqual(f.opts[0], { name: 'testimonials', consistency: 'strong' });
 });
