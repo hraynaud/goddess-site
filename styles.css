@@ -989,12 +989,25 @@ ul {
 
 /* Testimonial video grid */
 .video-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;   /* a short last row sits centered */
   gap: 28px;
   max-width: 960px;
   margin: 40px auto 0;
+  container-type: inline-size;
 }
+
+/* Same columns the old auto-fit grid gave (260px minimum card, 28px gap). */
+.video-grid > .video-card { flex: 0 0 100%; }
+@container (min-width: 548px) { .video-grid > .video-card { flex-basis: calc((100% - 28px) / 2); } }
+@container (min-width: 836px) { .video-grid > .video-card { flex-basis: calc((100% - 56px) / 3); } }
+
+/* Horizontal (16:9) videos span the full grid width. */
+.video-grid > .video-card--wide { flex-basis: 100%; }
+.video-card.video-card--wide iframe { aspect-ratio: 16 / 9; }
+
+.testimonials-status { text-align: center; margin: 32px 0 0; }
 
 .video-card {
   margin: 0;

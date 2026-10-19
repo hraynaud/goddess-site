@@ -53,29 +53,27 @@ document.querySelectorAll(
 // The videos are YouTube embeds, so we swap the iframe's src between the
 // English and Spanish embed URLs. autoplay=1 is safe here because the swap
 // is driven by a deliberate user click (button gesture).
-document.querySelectorAll('.lang-toggle').forEach(toggle => {
+// Cards are rendered after load by testimonials.js, so listen on the document.
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('.lang-toggle__btn');
+  if (!btn) return;
+  const toggle = btn.closest('.lang-toggle');
   const frame = toggle.parentElement.querySelector('.bilingual-video');
   if (!frame) return;
 
-  toggle.querySelectorAll('.lang-toggle__btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const lang = btn.dataset.lang;
-      const nextSrc = frame.dataset[lang];
-      if (!nextSrc) return;
+  const nextSrc = frame.dataset[btn.dataset.lang];
+  if (!nextSrc) return;
+  const currentBase = (frame.getAttribute('src') || '').split('?')[0];
+  if (currentBase === nextSrc) return;
 
-      const currentBase = (frame.getAttribute('src') || '').split('?')[0];
-      if (currentBase === nextSrc) return;
-
-      // Update button states (and the sliding highlight via .is-active)
-      toggle.querySelectorAll('.lang-toggle__btn').forEach(b => {
-        const active = b === btn;
-        b.classList.toggle('is-active', active);
-        b.setAttribute('aria-pressed', active ? 'true' : 'false');
-      });
-
-      frame.setAttribute('src', nextSrc + '?autoplay=1&rel=0');
-    });
+  // Update button states (and the sliding highlight via .is-active)
+  toggle.querySelectorAll('.lang-toggle__btn').forEach(b => {
+    const active = b === btn;
+    b.classList.toggle('is-active', active);
+    b.setAttribute('aria-pressed', active ? 'true' : 'false');
   });
+
+  frame.setAttribute('src', nextSrc + '?autoplay=1&rel=0');
 });
 
 // Contact form handling (Netlify Forms via AJAX)
@@ -173,23 +171,26 @@ if (lightbox) {
     render();
   };
 
-  // Single-image chat screenshots
-  document.querySelectorAll('.chat-link').forEach(link => {
-    link.addEventListener('click', () =>
-      openLightbox([{ src: link.dataset.chatSrc, alt: 'Message exchange with the mother' }]));
-  });
-
-  // Letters deck → carousel of all letter cards
-  const deck = document.getElementById('lettersDeck');
-  if (deck) {
-    const letters = [...deck.querySelectorAll('.letter-card')]
+  // Chat screenshots and the letters deck are rendered after load by
+  // testimonials.js, so listen on the document instead of on each element.
+  const openDeck = (deckEl) => {
+    const letters = [...deckEl.querySelectorAll('.letter-card')]
       .map(img => ({ src: img.getAttribute('src'), alt: img.alt }));
-    const openDeck = () => openLightbox(letters, 0);
-    deck.addEventListener('click', openDeck);
-    deck.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDeck(); }
-    });
-  }
+    if (letters.length) openLightbox(letters, 0);
+  };
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('.chat-link');
+    if (link) {
+      openLightbox([{ src: link.dataset.chatSrc, alt: link.dataset.chatAlt || 'Message screenshot' }]);
+      return;
+    }
+    const deckEl = e.target.closest('#lettersDeck');
+    if (deckEl) openDeck(deckEl);
+  });
+  document.addEventListener('keydown', (e) => {
+    const deckEl = e.target.closest && e.target.closest('#lettersDeck');
+    if (deckEl && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openDeck(deckEl); }
+  });
 
   lightboxClose.addEventListener('click', closeLightbox);
   lightboxPrev.addEventListener('click', (e) => { e.stopPropagation(); step(-1); });

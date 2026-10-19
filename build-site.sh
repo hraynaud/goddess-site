@@ -8,7 +8,7 @@ cd "$(dirname "$0")"
 
 OUT="site"
 rm -rf "$OUT"
-mkdir -p "$OUT/testimonials"
+mkdir -p "$OUT"
 
 # Copy files matching a glob into a dir, skipping silently if none exist.
 copy_glob() { local dest="${!#}"; local files=("${@:1:$#-1}"); [ ${#files[@]} -gt 0 ] && cp "${files[@]}" "$dest"; return 0; }
@@ -17,19 +17,15 @@ copy_glob() { local dest="${!#}"; local files=("${@:1:$#-1}"); [ ${#files[@]} -g
 cp index.html scheduling.html scheduling.js script.js styles.css "$OUT/"
 
 # --- Testimonials admin page (data lives in Netlify Blobs; see netlify/functions) ---
-cp admin.html admin.css admin.js "$OUT/"
+cp admin.html admin.css admin.js testimonials.js "$OUT/"
 cp netlify/lib/youtube.mjs "$OUT/youtube.mjs"
 
 # --- Images used by the pages ---
 cp Cosmic_Healing_Light.jpg goddess-in-white.jpeg "$OUT/"
 
-# --- Testimonial chat screenshot ---
-cp testimonials/baby-rash-chat.png "$OUT/testimonials/"
-
-# --- Letter images (deck/carousel) — images only, skip the .docx source files ---
-mkdir -p "$OUT/testimonials/text"
-copy_glob testimonials/text/*.jpg "$OUT/testimonials/text/"
-copy_glob testimonials/text/*.png "$OUT/testimonials/text/"
+# --- Testimonial images (letters, chat screenshot) now live in Netlify Blobs and
+#     are managed at /admin. The source files stay in testimonials/ for the
+#     one-time import (scripts/import-testimonials.mjs). ---
 
 # --- All videos (testimonials, Robin Jay interview, and the earth-energy clip)
 #     now live on YouTube and embed as iframes. No video files ship at all. ---
