@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add Video (mockup)</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-dark: #0d0d2b; --bg: #141430; --card: #1c1c40; --gold: #d4af37; --gold-light: #f0d68a;
+    --purple: #310055; --purple-light: #a78bca; --text: #f5f0e8; --border: rgba(212,175,55,.18);
+    --danger: #e98a8a; --ok: #8fd6a4;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #07071a; color: var(--text); font-family: Montserrat, sans-serif; font-size: 15px; }
+  .note { background: var(--purple); color: var(--gold-light); text-align: center; padding: 8px 16px; font-size: 13px; }
+  .stage { display: flex; flex-wrap: wrap; justify-content: center; gap: 32px; padding: 32px 16px 60px; }
+  .step { width: 360px; max-width: 100%; }
+  .step h4 { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-size: 20px; margin: 0 0 4px; text-align: center; }
+  .step .sub { text-align: center; font-size: 12px; opacity: .7; margin: 0 0 12px; }
+  .phone { background: var(--bg-dark); border: 1px solid var(--border); border-radius: 28px; overflow: hidden; min-height: 720px; box-shadow: 0 10px 40px rgba(0,0,0,.5); }
+  .top { display: flex; align-items: center; gap: 12px; padding: 16px; border-bottom: 1px solid var(--border); }
+  .top .back { font-size: 20px; opacity: .8; }
+  .top h1 { font-family: 'Cormorant Garamond', serif; font-size: 24px; margin: 0; color: var(--gold); }
+  .body { padding: 16px; }
+  label { display: block; font-size: 13px; font-weight: 600; margin: 18px 0 6px; }
+  label:first-child { margin-top: 0; }
+  label small { font-weight: 400; opacity: .7; }
+  .hint { font-size: 12px; opacity: .65; margin-top: 4px; }
+  .input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font: inherit; min-height: 46px; }
+  .input.ph { color: rgba(245,240,232,.4); }
+  .input.err { border-color: var(--danger); }
+  .input.good { border-color: var(--ok); }
+  .errmsg { color: var(--danger); font-size: 12px; margin-top: 5px; }
+  .okmsg { color: var(--ok); font-size: 12px; margin-top: 5px; }
+  .preview { margin-top: 10px; aspect-ratio: 16/9; border-radius: 10px; overflow: hidden; position: relative; background: #000; }
+  .preview img { width: 100%; height: 100%; object-fit: cover; opacity: .85; }
+  .preview span { position: absolute; inset: 0; display: grid; place-items: center; font-size: 42px; text-shadow: 0 2px 8px #000; }
+  .preview.small { aspect-ratio: auto; height: 90px; }
+  .player { margin: 10px auto 0; width: 62%; aspect-ratio: 9/16; border-radius: 10px; overflow: hidden; background: #000; border: 1px solid var(--border); }
+  .player.wide { width: 100%; aspect-ratio: 16/9; }
+  .player iframe { width: 100%; height: 100%; border: 0; display: block; }
+  .seg { display: flex; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 3px; }
+  .seg span { flex: 1; text-align: center; padding: 9px 4px; border-radius: 8px; font-size: 13px; }
+  .seg span.on { background: var(--gold); color: var(--bg-dark); font-weight: 600; }
+  .empty-prev.tall { width: 62%; margin-left: auto; margin-right: auto; aspect-ratio: 9/16; }
+  .empty-prev { margin-top: 10px; aspect-ratio: 16/9; border-radius: 10px; border: 1px dashed var(--border); display: grid; place-items: center; font-size: 13px; opacity: .55; text-align: center; padding: 16px; }
+  .drop { border: 1px dashed var(--border); border-radius: 10px; padding: 16px; text-align: center; font-size: 13px; opacity: .75; }
+  .shot { display: flex; align-items: center; gap: 10px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 8px; font-size: 13px; }
+  .shot img { width: 44px; height: 60px; object-fit: cover; object-position: top; border-radius: 4px; background: #fff; }
+  .shot .x { margin-left: auto; opacity: .7; }
+  .acts { display: flex; gap: 10px; margin-top: 24px; }
+  .btn { flex: 1; background: var(--gold); color: var(--bg-dark); border: 0; border-radius: 10px; padding: 14px; font: inherit; font-weight: 600; text-align: center; }
+  .btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+  .btn.off { opacity: .4; }
+  .toast { margin: 16px; padding: 12px 14px; border-radius: 10px; background: rgba(143,214,164,.12); border: 1px solid var(--ok); color: var(--ok); font-size: 13px; display: flex; gap: 8px; align-items: center; }
+  .toast a { color: var(--gold-light); margin-left: auto; font-size: 12px; }
+  .row { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 8px; margin-bottom: 8px; }
+  .row img { width: 96px; height: 54px; object-fit: cover; border-radius: 6px; }
+  .row .cap { font-weight: 600; font-size: 14px; }
+  .row.new { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(212,175,55,.25); }
+  .tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 999px; background: rgba(167,139,202,.18); color: var(--purple-light); margin-top: 3px; }
+  .newtag { background: var(--gold); color: var(--bg-dark); }
+  .listhead { display: flex; justify-content: space-between; align-items: center; padding: 0 16px 10px; }
+  .listhead h2 { font-family: 'Cormorant Garamond', serif; margin: 0; font-size: 22px; }
+  .add { background: var(--gold); color: var(--bg-dark); border-radius: 8px; padding: 8px 12px; font-weight: 600; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="note">MOCKUP — not functional. The "Add video" screen as she'd see it on her phone, in three steps.</div>
+
+<div class="stage">
+
+  <!-- Step 1: empty -->
+  <div class="step">
+    <h4>1 · Opens empty</h4>
+    <p class="sub">After tapping “+ Add video”</p>
+    <div class="phone">
+      <div class="top"><span class="back">←</span><h1>Add a video</h1></div>
+      <div class="body">
+        <label>YouTube link</label>
+        <div class="input ph">Paste the link from YouTube</div>
+        <div class="hint">In YouTube, tap Share → Copy link.</div>
+
+        <label>Video shape</label>
+        <div class="seg"><span class="on">▯ Vertical (phone)</span><span>▭ Horizontal</span></div>
+        <div class="empty-prev tall">The video will preview here, exactly as visitors see it</div>
+
+        <label>Caption</label>
+        <div class="input ph">e.g. Hip Healing</div>
+        <div class="hint">Shown under the video on the homepage.</div>
+
+        <label>Spanish version <small>(optional)</small></label>
+        <div class="input ph">Paste the Spanish YouTube link</div>
+        <div class="hint">Adds an English / Español switch to this video.</div>
+
+        <label>“Read the messages” screenshot <small>(optional)</small></label>
+        <div class="drop">📷 Tap to choose an image</div>
+
+        <div class="acts"><div class="btn ghost">Cancel</div><div class="btn off">Save video</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: filled -->
+  <div class="step">
+    <h4>2 · Filled in</h4>
+    <p class="sub">Previews confirm she pasted the right videos</p>
+    <div class="phone">
+      <div class="top"><span class="back">←</span><h1>Add a video</h1></div>
+      <div class="body">
+        <label>YouTube link</label>
+        <div class="input good">https://youtu.be/81-TSDf7Hkw</div>
+
+        <label>Video shape</label>
+        <div class="seg"><span class="on">▯ Vertical (phone)</span><span>▭ Horizontal</span></div>
+        <div class="player"><iframe src="https://www.youtube-nocookie.com/embed/81-TSDf7Hkw" title="Preview" allowfullscreen></iframe></div>
+        <div class="hint" style="text-align:center">If you see black bars, try the other shape.</div>
+
+        <label>Caption</label>
+        <div class="input">Janet</div>
+
+        <label>Spanish version <small>(optional)</small></label>
+        <div class="input err">https://www.instagram.com/p/xyz</div>
+        <div class="errmsg">That doesn’t look like a YouTube link.</div>
+
+        <label>“Read the messages” screenshot <small>(optional)</small></label>
+        <div class="shot"><img src="../../testimonials/baby-rash-chat.png" alt=""><span>messages.png</span><span class="x">✕ Remove</span></div>
+
+        <div class="acts"><div class="btn ghost">Cancel</div><div class="btn off">Save video</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2b: horizontal -->
+  <div class="step">
+    <h4>2b · Horizontal video</h4>
+    <p class="sub">Same form with “Horizontal” picked</p>
+    <div class="phone">
+      <div class="top"><span class="back">←</span><h1>Add a video</h1></div>
+      <div class="body">
+        <label>YouTube link</label>
+        <div class="input good">https://www.youtube.com/watch?v=aqz-KE-bpKQ</div>
+
+        <label>Video shape</label>
+        <div class="seg"><span>▯ Vertical (phone)</span><span class="on">▭ Horizontal</span></div>
+        <div class="player wide"><iframe src="https://www.youtube-nocookie.com/embed/aqz-KE-bpKQ" title="Preview" allowfullscreen></iframe></div>
+        <div class="hint">On the homepage, horizontal videos stretch across the full width of the grid.</div>
+
+        <label>Caption</label>
+        <div class="input">Example horizontal video</div>
+
+        <div class="acts"><div class="btn ghost">Cancel</div><div class="btn">Save video</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: saved -->
+  <div class="step">
+    <h4>3 · Saved</h4>
+    <p class="sub">Back on the list; it’s live on the homepage</p>
+    <div class="phone">
+      <div class="top"><h1>Testimonials Admin</h1></div>
+      <div class="toast">✓ Saved — it’s on the homepage now. <a href="#">View ↗</a></div>
+      <div class="listhead"><h2>Videos</h2><span class="add">+ Add video</span></div>
+      <div style="padding: 0 16px;">
+        <div class="row"><img src="https://img.youtube.com/vi/QSdwNfF6Klg/mqdefault.jpg" alt=""><div><div class="cap">Hip Healing</div></div></div>
+        <div class="row"><img src="https://img.youtube.com/vi/InJeLhX9bsc/mqdefault.jpg" alt=""><div><div class="cap">A Baby’s Rash</div><span class="tag">📱 Messages</span></div></div>
+        <div class="row"><img src="https://img.youtube.com/vi/dokFscbLtQI/mqdefault.jpg" alt=""><div><div class="cap">A Neighbor’s Story</div></div></div>
+        <div class="row"><img src="https://img.youtube.com/vi/3_R41WpsVxA/mqdefault.jpg" alt=""><div><div class="cap">Michelle’s Healing</div></div></div>
+        <div class="row new"><img src="https://img.youtube.com/vi/81-TSDf7Hkw/mqdefault.jpg" alt=""><div><div class="cap">Janet</div><span class="tag">Español</span> <span class="tag newtag">New</span></div></div>
+      </div>
+      <p class="sub" style="margin-top:12px;">New videos go to the end; she can move them with ↑ ↓.</p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

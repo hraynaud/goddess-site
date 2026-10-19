@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Testimonials Admin (mockup)</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-dark: #0d0d2b; --bg: #141430; --card: #1c1c40; --gold: #d4af37; --gold-light: #f0d68a;
+    --purple: #310055; --purple-light: #a78bca; --text: #f5f0e8; --border: rgba(212,175,55,.18);
+    --danger: #e98a8a;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg-dark); color: var(--text); font-family: Montserrat, sans-serif; font-size: 15px; }
+  .note { background: var(--purple); color: var(--gold-light); text-align: center; padding: 8px 16px; font-size: 13px; }
+  header { display: flex; justify-content: space-between; align-items: center; padding: 18px 24px; border-bottom: 1px solid var(--border); }
+  header h1 { font-family: 'Cormorant Garamond', serif; font-size: 26px; margin: 0; color: var(--gold); }
+  header a { color: var(--text); opacity: .8; font-size: 13px; text-decoration: none; margin-left: 18px; }
+  main { max-width: 1180px; margin: 0 auto; padding: 24px 16px 60px; display: grid; grid-template-columns: 1fr 400px; gap: 24px; align-items: start; }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+  .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .tab { padding: 9px 18px; border-radius: 999px; border: 1px solid var(--border); background: transparent; color: var(--text); font: inherit; font-weight: 500; }
+  .tab.on { background: var(--gold); color: var(--bg-dark); border-color: var(--gold); }
+  .bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .bar h2 { font-family: 'Cormorant Garamond', serif; font-size: 24px; margin: 0; }
+  .btn { background: var(--gold); color: var(--bg-dark); border: 0; border-radius: 8px; padding: 10px 16px; font: inherit; font-weight: 600; }
+  .btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+  .list { display: flex; flex-direction: column; gap: 10px; }
+  .row { display: flex; align-items: center; gap: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px; }
+  .row img { width: 112px; height: 63px; object-fit: cover; border-radius: 6px; flex: none; background: #000; }
+  .row .info { flex: 1; min-width: 0; }
+  .row .cap { font-weight: 600; }
+  .tags { margin-top: 4px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: rgba(167,139,202,.18); color: var(--purple-light); }
+  .acts { display: flex; gap: 6px; flex: none; }
+  .ic { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text); font-size: 14px; }
+  .ic.del { color: var(--danger); }
+  .row.confirm { border-color: var(--danger); }
+  .confirmbar { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  .confirmbar .btn { padding: 7px 12px; background: var(--danger); }
+  .confirmbar .btn.ghost { background: transparent; }
+  aside { background: var(--bg); border: 1px solid var(--gold); border-radius: 14px; padding: 20px; position: sticky; top: 16px; }
+  aside h3 { font-family: 'Cormorant Garamond', serif; font-size: 22px; margin: 0 0 14px; color: var(--gold); }
+  label { display: block; font-size: 13px; font-weight: 600; margin: 14px 0 6px; }
+  label small { font-weight: 400; opacity: .7; }
+  input[type=text] { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-dark); color: var(--text); font: inherit; }
+  input.err { border-color: var(--danger); }
+  .errmsg { color: var(--danger); font-size: 12px; margin-top: 4px; }
+  .preview { margin-top: 10px; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; position: relative; background: #000; }
+  .preview img { width: 100%; height: 100%; object-fit: cover; opacity: .85; }
+  .preview span { position: absolute; inset: 0; display: grid; place-items: center; font-size: 40px; }
+  .drop { border: 1px dashed var(--border); border-radius: 8px; padding: 14px; text-align: center; font-size: 13px; opacity: .8; }
+  .formacts { display: flex; gap: 8px; margin-top: 20px; }
+  .formacts .btn { flex: 1; }
+  .letters { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .lcard { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 8px; }
+  .lcard img { width: 100%; height: 150px; object-fit: cover; object-position: top; border-radius: 6px; background: #fff; }
+  .lcard p { font-size: 12px; margin: 8px 2px; line-height: 1.35; }
+  .lcard .acts { justify-content: space-between; }
+  .section-gap { margin-top: 36px; }
+  .caption-note { font-size: 12px; opacity: .6; margin: 6px 0 14px; }
+</style>
+</head>
+<body>
+<div class="note">MOCKUP — not functional. Shows the main screen with the "Add video" panel open.</div>
+<header>
+  <h1>Testimonials Admin</h1>
+  <div><a href="#">View site ↗</a><a href="#">Log out</a></div>
+</header>
+
+<main>
+  <section>
+    <div class="tabs"><button class="tab on">Videos (9)</button><button class="tab">Letters (5)</button></div>
+
+    <div class="bar"><h2>Videos</h2><button class="btn">+ Add video</button></div>
+    <p class="caption-note">Shown on the homepage in this order.</p>
+    <div class="list">
+      <div class="row"><img src="https://img.youtube.com/vi/QSdwNfF6Klg/mqdefault.jpg" alt=""><div class="info"><div class="cap">Hip Healing</div></div><div class="acts"><button class="ic">↑</button><button class="ic">↓</button><button class="ic">✎</button><button class="ic del">🗑</button></div></div>
+      <div class="row"><img src="https://img.youtube.com/vi/InJeLhX9bsc/mqdefault.jpg" alt=""><div class="info"><div class="cap">A Baby’s Rash</div><div class="tags"><span class="tag">📱 Messages screenshot</span></div></div><div class="acts"><button class="ic">↑</button><button class="ic">↓</button><button class="ic">✎</button><button class="ic del">🗑</button></div></div>
+      <div class="row"><img src="https://img.youtube.com/vi/dokFscbLtQI/mqdefault.jpg" alt=""><div class="info"><div class="cap">A Neighbor’s Story</div></div><div class="acts"><button class="ic">↑</button><button class="ic">↓</button><button class="ic">✎</button><button class="ic del">🗑</button></div></div>
+      <div class="row confirm"><img src="https://img.youtube.com/vi/kWsm3VR1BkY/mqdefault.jpg" alt=""><div class="info"><div class="cap">Multiple Healings with Mari</div></div><div class="confirmbar">Delete this testimonial? <button class="btn">Delete</button><button class="btn ghost">Cancel</button></div></div>
+      <div class="row"><img src="https://img.youtube.com/vi/taas9tyKrhI/mqdefault.jpg" alt=""><div class="info"><div class="cap">Maria’s Toe</div></div><div class="acts"><button class="ic">↑</button><button class="ic">↓</button><button class="ic">✎</button><button class="ic del">🗑</button></div></div>
+      <div class="row"><img src="https://img.youtube.com/vi/81-TSDf7Hkw/mqdefault.jpg" alt=""><div class="info"><div class="cap">Janet</div><div class="tags"><span class="tag">Español</span></div></div><div class="acts"><button class="ic">↑</button><button class="ic">↓</button><button class="ic">✎</button><button class="ic del">🗑</button></div></div>
+      <div class="row"><img src="https://img.youtube.com/vi/UteLo90dJp4/mqdefault.jpg" alt=""><div class="info"><div class="cap">Andy</div><div class="tags"><span class="tag">Español</span></div></div><div class="acts"><button class="ic">↑</button><button class="ic">↓</button><button class="ic">✎</button><button class="ic del">🗑</button></div></div>
+      <div class="row"><img src="https://img.youtube.com/vi/Ff7bHdkLALk/mqdefault.jpg" alt=""><div class="info"><div class="cap">Max Feels It</div></div><div class="acts"><button class="ic">↑</button><button class="ic">↓</button><button class="ic">✎</button><button class="ic del">🗑</button></div></div>
+      <div class="row"><img src="https://img.youtube.com/vi/3_R41WpsVxA/mqdefault.jpg" alt=""><div class="info"><div class="cap">Michelle’s Healing</div></div><div class="acts"><button class="ic">↑</button><button class="ic">↓</button><button class="ic">✎</button><button class="ic del">🗑</button></div></div>
+    </div>
+
+    <div class="section-gap bar"><h2>Letters tab (preview)</h2><button class="btn">+ Add letter</button></div>
+    <div class="letters">
+      <div class="lcard"><img src="../../testimonials/text/82947.jpg" alt=""><p>Letter from Rebecca Marino — herniated disc</p><div class="acts"><button class="ic">←</button><button class="ic">→</button><button class="ic">✎</button><button class="ic del">🗑</button></div></div>
+      <div class="lcard"><img src="../../testimonials/text/brook-letter.png" alt=""><p>Email from Brook — chronic elbow pain</p><div class="acts"><button class="ic">←</button><button class="ic">→</button><button class="ic">✎</button><button class="ic del">🗑</button></div></div>
+      <div class="lcard"><img src="../../testimonials/text/cousin.png" alt=""><p>From Goddess’s cousin — pain after a fall</p><div class="acts"><button class="ic">←</button><button class="ic">→</button><button class="ic">✎</button><button class="ic del">🗑</button></div></div>
+      <div class="lcard"><img src="../../testimonials/text/marcia-wade.png" alt=""><p>Letter from Marcia Wade — ear pain</p><div class="acts"><button class="ic">←</button><button class="ic">→</button><button class="ic">✎</button><button class="ic del">🗑</button></div></div>
+      <div class="lcard"><img src="../../testimonials/text/mannie.png" alt=""><p>Letter from Mannie</p><div class="acts"><button class="ic">←</button><button class="ic">→</button><button class="ic">✎</button><button class="ic del">🗑</button></div></div>
+    </div>
+  </section>
+
+  <aside>
+    <h3>Add a video</h3>
+    <label>YouTube link</label>
+    <input type="text" value="https://youtu.be/QSdwNfF6Klg">
+    <div class="preview"><img src="https://img.youtube.com/vi/QSdwNfF6Klg/hqdefault.jpg" alt=""><span>▶</span></div>
+
+    <label>Caption</label>
+    <input type="text" class="err" value="" placeholder="e.g. Hip Healing">
+    <div class="errmsg">Please add a caption.</div>
+
+    <label>Spanish version <small>(optional YouTube link)</small></label>
+    <input type="text" placeholder="https://youtu.be/…">
+
+    <label>“Read the messages” screenshot <small>(optional)</small></label>
+    <div class="drop">Tap to choose an image</div>
+
+    <div class="formacts"><button class="btn ghost">Cancel</button><button class="btn">Save video</button></div>
+  </aside>
+</main>
+</body>
+</html>
